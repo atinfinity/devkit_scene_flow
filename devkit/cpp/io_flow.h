@@ -263,7 +263,7 @@ public:
                     else {
                         float dfu = getFlowU(u, v) - F_occ.getFlowU(u, v);
                         float dfv = getFlowV(u, v) - F_occ.getFlowV(u, v);
-                        float f_err = std::min(sqrt(dfu*dfu + dfv*dfv), 5.0) / 5.0f;
+                        float f_err = std::min(sqrtf(dfu*dfu + dfv*dfv), 5.0f) / 5.0f;
 
                         val[2] = (uint8_t)(f_err*255.0); //red
                         val[1] = (uint8_t)(f_err*255.0); //green
