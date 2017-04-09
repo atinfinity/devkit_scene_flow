@@ -2,11 +2,11 @@
 The development kit of Stereo Evaluation 2015(OpenCV version)
 
 ## Introduction
-Original [development kit](http://kitti.is.tue.mpg.de/kitti/devkit_scene_flow.zip) of [Stereo Evaluation 2015](http://www.cvlibs.net/datasets/kitti/eval_scene_flow.php?benchmark=stereo) depends on [png++](http://savannah.nongnu.org/projects/pngpp/).
+The original [development kit](http://kitti.is.tue.mpg.de/kitti/devkit_scene_flow.zip) of [Stereo Evaluation 2015](http://www.cvlibs.net/datasets/kitti/eval_scene_flow.php?benchmark=stereo) depends on [png++](http://savannah.nongnu.org/projects/pngpp/).
 As a result, it is difficult to execute on Windows. So, I changed this development kit to use OpenCV.
 
 ## Requirements
-- OpenCV 2.4.x/3.x
+- OpenCV 2.4.x or 3.x
 - CMake
 
 ## Build Instructions
