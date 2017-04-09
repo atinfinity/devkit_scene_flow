@@ -252,7 +252,7 @@ public:
                         }
                     }
                     else {
-                        float d_err = std::min(fabs(getDisp(u, v) - D_occ.getDisp(u, v)), 5.0f) / 5.0f;
+                        float d_err = std::min(fabs(getDisp(u, v) - D_occ.getDisp(u, v)), 5.0) / 5.0f;
                         val[2] = (uint8_t)(d_err*255.0); //red
                         val[1] = (uint8_t)(d_err*255.0); //green
                         val[0] = (uint8_t)(d_err*255.0); //blue
