@@ -419,7 +419,7 @@ bool eval(std::string result_sha/*, Mail* mail*/) {
         makeDirectory(result_dir + "/errors_disp_img_0/");
         makeDirectory(result_dir + "/result_disp_img_0/");
     }
-    if (eval_disp) {
+    if (eval_flow) {
         makeDirectory(result_dir + "/errors_flow_noc/");
         makeDirectory(result_dir + "/errors_flow_occ/");
         makeDirectory(result_dir + "/errors_flow_img/");
