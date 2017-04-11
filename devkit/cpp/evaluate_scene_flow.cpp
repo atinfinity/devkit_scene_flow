@@ -49,35 +49,41 @@ std::vector<float> disparityErrorsOutlier(DisparityImage &D_gt, DisparityImage &
     for (int32_t u = 0; u < width; u++) {
         for (int32_t v = 0; v < height; v++) {
             if (D_gt.isValid(u, v)) {
-                float d_gt = D_gt.getDisp(u, v);
+                float d_gt  = D_gt.getDisp(u, v);
                 float d_est = D_ipol.getDisp(u, v);
                 bool  d_err = fabs(d_gt - d_est) > ABS_THRESH && fabs(d_gt - d_est) / fabs(d_gt) > REL_THRESH;
                 if (O_map.getValue(u, v) == 0) {
-                    if (d_err)
+                    if (d_err) {
                         num_errors_bg++;
+                    }
                     num_pixels_bg++;
                     if (D_orig.isValid(u, v)) {
-                        if (d_err)
+                        if (d_err) {
                             num_errors_bg_result++;
+                        }
                         num_pixels_bg_result++;
                     }
                 }
                 else {
-                    if (d_err)
+                    if (d_err) {
                         num_errors_fg++;
+                    }
                     num_pixels_fg++;
                     if (D_orig.isValid(u, v)) {
-                        if (d_err)
+                        if (d_err) {
                             num_errors_fg_result++;
+                        }
                         num_pixels_fg_result++;
                     }
                 }
-                if (d_err)
+                if (d_err) {
                     num_errors_all++;
+                }
                 num_pixels_all++;
                 if (D_orig.isValid(u, v)) {
-                    if (d_err)
+                    if (d_err) {
                         num_errors_all_result++;
+                    }
                     num_pixels_all_result++;
                 }
             }
@@ -113,7 +119,7 @@ std::vector<float> flowErrorsOutlier(FlowImage &F_gt, FlowImage &F_orig, FlowIma
     }
 
     // extract width and height
-    int32_t width = F_gt.width();
+    int32_t width  = F_gt.width();
     int32_t height = F_gt.height();
 
     // init errors
@@ -141,35 +147,41 @@ std::vector<float> flowErrorsOutlier(FlowImage &F_gt, FlowImage &F_orig, FlowIma
             bool  f_err = f_dist > ABS_THRESH && f_dist / f_mag > REL_THRESH;
             if (O_map.getValue(u, v) == 0) {
                 if (F_gt.isValid(u, v)) {
-                    if (f_err)
+                    if (f_err) {
                         num_errors_bg++;
+                    }
                     num_pixels_bg++;
                     if (F_orig.isValid(u, v)) {
-                        if (f_err)
+                        if (f_err) {
                             num_errors_bg_result++;
+                        }
                         num_pixels_bg_result++;
                     }
                 }
             }
             else {
                 if (F_gt.isValid(u, v)) {
-                    if (f_err)
+                    if (f_err) {
                         num_errors_fg++;
+                    }
                     num_pixels_fg++;
                     if (F_orig.isValid(u, v)) {
-                        if (f_err)
+                        if (f_err) {
                             num_errors_fg_result++;
+                        }
                         num_pixels_fg_result++;
                     }
                 }
             }
             if (F_gt.isValid(u, v)) {
-                if (f_err)
+                if (f_err) {
                     num_errors_all++;
+                }
                 num_pixels_all++;
                 if (F_orig.isValid(u, v)) {
-                    if (f_err)
+                    if (f_err) {
                         num_errors_all_result++;
+                    }
                     num_pixels_all_result++;
                 }
             }
@@ -216,7 +228,7 @@ std::vector<float> sceneFlowErrorsOutlier(DisparityImage &D_gt_0, DisparityImage
     }
 
     // extract width and height (all modalities have the same size!)
-    int32_t width = F_gt.width();
+    int32_t width  = F_gt.width();
     int32_t height = F_gt.height();
 
     // init errors
@@ -237,49 +249,57 @@ std::vector<float> sceneFlowErrorsOutlier(DisparityImage &D_gt_0, DisparityImage
     // for all pixels do
     for (int32_t u = 0; u < width; u++) {
         for (int32_t v = 0; v < height; v++) {
-            float d_gt_0 = D_gt_0.getDisp(u, v);
+            float d_gt_0  = D_gt_0.getDisp(u, v);
             float d_est_0 = D_ipol_0.getDisp(u, v);
             bool  d_err_0 = fabs(d_gt_0 - d_est_0) > ABS_THRESH && fabs(d_gt_0 - d_est_0) / fabs(d_gt_0) > REL_THRESH;
-            float d_gt_1 = D_gt_1.getDisp(u, v);
+            float d_gt_1  = D_gt_1.getDisp(u, v);
             float d_est_1 = D_ipol_1.getDisp(u, v);
             bool  d_err_1 = fabs(d_gt_1 - d_est_1) > ABS_THRESH && fabs(d_gt_1 - d_est_1) / fabs(d_gt_1) > REL_THRESH;
-            float fu = F_gt.getFlowU(u, v) - F_ipol.getFlowU(u, v);
-            float fv = F_gt.getFlowV(u, v) - F_ipol.getFlowV(u, v);
+
+            float fu     = F_gt.getFlowU(u, v) - F_ipol.getFlowU(u, v);
+            float fv     = F_gt.getFlowV(u, v) - F_ipol.getFlowV(u, v);
             float f_dist = sqrt(fu*fu + fv*fv);
-            float f_mag = F_gt.getFlowMagnitude(u, v);
-            bool  f_err = f_dist > ABS_THRESH && f_dist / f_mag > REL_THRESH;
+            float f_mag  = F_gt.getFlowMagnitude(u, v);
+            bool  f_err  = f_dist > ABS_THRESH && f_dist / f_mag > REL_THRESH;
             bool  sf_err = d_err_0 || d_err_1 || f_err;
+
             if (O_map.getValue(u, v) == 0) {
                 if (D_gt_0.isValid(u, v) && D_gt_1.isValid(u, v) && F_gt.isValid(u, v)) {
-                    if (sf_err)
+                    if (sf_err) {
                         num_errors_bg++;
+                    }
                     num_pixels_bg++;
                     if (D_orig_0.isValid(u, v)) {
-                        if (sf_err)
+                        if (sf_err) {
                             num_errors_bg_result++;
+                        }
                         num_pixels_bg_result++;
                     }
                 }
             }
             else {
                 if (D_gt_0.isValid(u, v) && D_gt_1.isValid(u, v) && F_gt.isValid(u, v)) {
-                    if (sf_err)
+                    if (sf_err) {
                         num_errors_fg++;
+                    }
                     num_pixels_fg++;
                     if (D_orig_0.isValid(u, v)) {
-                        if (sf_err)
+                        if (sf_err) {
                             num_errors_fg_result++;
+                        }
                         num_pixels_fg_result++;
                     }
                 }
             }
             if (D_gt_0.isValid(u, v) && D_gt_1.isValid(u, v) && F_gt.isValid(u, v)) {
-                if (sf_err)
+                if (sf_err) {
                     num_errors_all++;
+                }
                 num_pixels_all++;
                 if (D_orig_0.isValid(u, v)) {
-                    if (sf_err)
+                    if (sf_err) {
                         num_errors_all_result++;
+                    }
                     num_pixels_all_result++;
                 }
             }
@@ -311,7 +331,7 @@ void writeSceneFlowErrorImage(DisparityImage &D_gt_noc_0, DisparityImage &D_gt_o
     DisparityImage &D_gt_noc_1, DisparityImage &D_gt_occ_1, DisparityImage &D_ipol_1,
     FlowImage &F_gt_noc, FlowImage &F_gt_occ, FlowImage &F_ipol,
     std::string file_name) {
-    int32_t width = F_gt_noc.width();
+    int32_t width  = F_gt_noc.width();
     int32_t height = F_gt_noc.height();
     cv::Mat image(cv::Size(width, height), CV_8UC3, cv::Scalar(0, 0, 0));
 
@@ -354,7 +374,7 @@ void writeSceneFlowErrorImage(DisparityImage &D_gt_noc_0, DisparityImage &D_gt_o
     cv::imwrite(file_name, image);
 }
 
-bool resultsAvailable(std::string dir, std::string folder_name/*, Mail* mail*/) {
+bool resultsAvailable(std::string dir, std::string folder_name) {
     int32_t count = 0;
     for (int32_t i = 0; i < NUM_TEST_IMAGES; i++) {
         char prefix[256];
@@ -377,25 +397,25 @@ void makeDirectory(const std::string path) {
 #endif
 }
 
-bool eval(std::string result_sha/*, Mail* mail*/) {
+bool eval(std::string result_sha) {
     // ground truth and result directories
-    std::string gt_img_dir = "data/scene_flow/image_2";
-    std::string gt_obj_map_dir = "data/scene_flow/obj_map";
+    std::string gt_img_dir        = "data/scene_flow/image_2";
+    std::string gt_obj_map_dir    = "data/scene_flow/obj_map";
     std::string gt_disp_noc_0_dir = "data/scene_flow/disp_noc_0";
     std::string gt_disp_occ_0_dir = "data/scene_flow/disp_occ_0";
     std::string gt_disp_noc_1_dir = "data/scene_flow/disp_noc_1";
     std::string gt_disp_occ_1_dir = "data/scene_flow/disp_occ_1";
-    std::string gt_flow_noc_dir = "data/scene_flow/flow_noc";
-    std::string gt_flow_occ_dir = "data/scene_flow/flow_occ";
-    std::string result_dir = "results/" + result_sha;
+    std::string gt_flow_noc_dir   = "data/scene_flow/flow_noc";
+    std::string gt_flow_occ_dir   = "data/scene_flow/flow_occ";
+    std::string result_dir        = "results/" + result_sha;
     std::string result_disp_0_dir = result_dir + "/data/disp_0";
     std::string result_disp_1_dir = result_dir + "/data/disp_1";
-    std::string result_flow_dir = result_dir + "/data/flow";
+    std::string result_flow_dir   = result_dir + "/data/flow";
 
     // check availability of results
-    bool avail_disp_0 = resultsAvailable(result_disp_0_dir, "disp_0"/*, mail*/);
-    bool avail_disp_1 = resultsAvailable(result_disp_1_dir, "disp_1"/*, mail*/);
-    bool avail_flow = resultsAvailable(result_flow_dir, "flow"/*, mail*/);
+    bool avail_disp_0 = resultsAvailable(result_disp_0_dir, "disp_0");
+    bool avail_disp_1 = resultsAvailable(result_disp_1_dir, "disp_1");
+    bool avail_flow   = resultsAvailable(result_flow_dir, "flow");
 
     // which benchmarks can be evaluated?
     bool eval_disp = avail_disp_0;
@@ -436,12 +456,12 @@ bool eval(std::string result_sha/*, Mail* mail*/) {
     }
 
     // accumulators
-    float errors_disp_noc_0[3 * 4] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
-    float errors_disp_occ_0[3 * 4] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
-    float errors_disp_noc_1[3 * 4] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
-    float errors_disp_occ_1[3 * 4] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
-    float errors_flow_noc[3 * 4] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
-    float errors_flow_occ[3 * 4] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
+    float errors_disp_noc_0[3 * 4]     = { 0,0,0,0,0,0,0,0,0,0,0,0 };
+    float errors_disp_occ_0[3 * 4]     = { 0,0,0,0,0,0,0,0,0,0,0,0 };
+    float errors_disp_noc_1[3 * 4]     = { 0,0,0,0,0,0,0,0,0,0,0,0 };
+    float errors_disp_occ_1[3 * 4]     = { 0,0,0,0,0,0,0,0,0,0,0,0 };
+    float errors_flow_noc[3 * 4]       = { 0,0,0,0,0,0,0,0,0,0,0,0 };
+    float errors_flow_occ[3 * 4]       = { 0,0,0,0,0,0,0,0,0,0,0,0 };
     float errors_scene_flow_noc[3 * 4] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
     float errors_scene_flow_occ[3 * 4] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
 
@@ -456,7 +476,6 @@ bool eval(std::string result_sha/*, Mail* mail*/) {
 
         // catch errors, when loading fails
         try {
-
             // declaration of global data structures
             DisparityImage D_gt_noc_0, D_gt_occ_0, D_orig_0, D_ipol_0;
             DisparityImage D_gt_noc_1, D_gt_occ_1, D_orig_1, D_ipol_1;
@@ -512,11 +531,13 @@ bool eval(std::string result_sha/*, Mail* mail*/) {
                     // save errors of error images to text file
                     FILE *errors_noc_file = fopen((result_dir + "/errors_disp_noc_0/" + prefix + ".txt").c_str(), "w");
                     FILE *errors_occ_file = fopen((result_dir + "/errors_disp_occ_0/" + prefix + ".txt").c_str(), "w");
-                    for (int32_t i = 0; i < 12; i += 2)
+                    for (int32_t i = 0; i < 12; i += 2) {
                         fprintf(errors_noc_file, "%f ", errors_noc_curr[i] / std::max(errors_noc_curr[i + 1], 1.0f));
+                    }
                     fprintf(errors_noc_file, "%f ", errors_noc_curr[12]);
-                    for (int32_t i = 0; i < 12; i += 2)
+                    for (int32_t i = 0; i < 12; i += 2) {
                         fprintf(errors_occ_file, "%f ", errors_occ_curr[i] / std::max(errors_occ_curr[i + 1], 1.0f));
+                    }
                     fprintf(errors_occ_file, "%f ", errors_occ_curr[12]);
                     fclose(errors_noc_file);
                     fclose(errors_occ_file);
@@ -566,11 +587,13 @@ bool eval(std::string result_sha/*, Mail* mail*/) {
                     // save errors of error images to text file
                     FILE *errors_noc_file = fopen((result_dir + "/errors_flow_noc/" + prefix + ".txt").c_str(), "w");
                     FILE *errors_occ_file = fopen((result_dir + "/errors_flow_occ/" + prefix + ".txt").c_str(), "w");
-                    for (int32_t i = 0; i < 12; i += 2)
+                    for (int32_t i = 0; i < 12; i += 2) {
                         fprintf(errors_noc_file, "%f ", errors_noc_curr[i] / std::max(errors_noc_curr[i + 1], 1.0f));
+                    }
                     fprintf(errors_noc_file, "%f ", errors_noc_curr[12]);
-                    for (int32_t i = 0; i < 12; i += 2)
+                    for (int32_t i = 0; i < 12; i += 2) {
                         fprintf(errors_occ_file, "%f ", errors_occ_curr[i] / std::max(errors_occ_curr[i + 1], 1.0f));
+                    }
                     fprintf(errors_occ_file, "%f ", errors_occ_curr[12]);
                     fclose(errors_noc_file);
                     fclose(errors_occ_file);
@@ -595,7 +618,7 @@ bool eval(std::string result_sha/*, Mail* mail*/) {
 
                 // check submitted result
                 std::string image_file = result_disp_1_dir + "/" + prefix + ".png";
-                if (!imageFormat(image_file, /*png::color_type_gray, 16*/CV_16UC1, D_gt_noc_1.width(), D_gt_noc_1.height())) {
+                if (!imageFormat(image_file, CV_16UC1, D_gt_noc_1.width(), D_gt_noc_1.height())) {
                     std::cerr << "ERROR: Input must be png, 1 channel, 16 bit, " << D_gt_noc_1.width() << " x " << D_gt_noc_1.height() << " px" << std::endl;
                     return false;
                 }
@@ -620,11 +643,13 @@ bool eval(std::string result_sha/*, Mail* mail*/) {
                     // save errors of error images to text file
                     FILE *errors_noc_file = fopen((result_dir + "/errors_disp_noc_1/" + prefix + ".txt").c_str(), "w");
                     FILE *errors_occ_file = fopen((result_dir + "/errors_disp_occ_1/" + prefix + ".txt").c_str(), "w");
-                    for (int32_t i = 0; i < 12; i += 2)
+                    for (int32_t i = 0; i < 12; i += 2) {
                         fprintf(errors_noc_file, "%f ", errors_noc_curr[i] / std::max(errors_noc_curr[i + 1], 1.0f));
+                    }
                     fprintf(errors_noc_file, "%f ", errors_noc_curr[12]);
-                    for (int32_t i = 0; i < 12; i += 2)
+                    for (int32_t i = 0; i < 12; i += 2) {
                         fprintf(errors_occ_file, "%f ", errors_occ_curr[i] / std::max(errors_occ_curr[i + 1], 1.0f));
+                    }
                     fprintf(errors_occ_file, "%f ", errors_occ_curr[12]);
                     fclose(errors_noc_file);
                     fclose(errors_occ_file);
@@ -654,11 +679,13 @@ bool eval(std::string result_sha/*, Mail* mail*/) {
                     // save errors of error images to text file
                     FILE *errors_noc_file = fopen((result_dir + "/errors_scene_flow_noc/" + prefix + ".txt").c_str(), "w");
                     FILE *errors_occ_file = fopen((result_dir + "/errors_scene_flow_occ/" + prefix + ".txt").c_str(), "w");
-                    for (int32_t i = 0; i < 12; i += 2)
+                    for (int32_t i = 0; i < 12; i += 2) {
                         fprintf(errors_noc_file, "%f ", errors_noc_curr[i] / std::max(errors_noc_curr[i + 1], 1.0f));
+                    }
                     fprintf(errors_noc_file, "%f ", errors_noc_curr[12]);
-                    for (int32_t i = 0; i < 12; i += 2)
+                    for (int32_t i = 0; i < 12; i += 2) {
                         fprintf(errors_occ_file, "%f ", errors_occ_curr[i] / std::max(errors_occ_curr[i + 1], 1.0f));
+                    }
                     fprintf(errors_occ_file, "%f ", errors_occ_curr[12]);
                     fclose(errors_noc_file);
                     fclose(errors_occ_file);
@@ -760,7 +787,7 @@ bool eval(std::string result_sha/*, Mail* mail*/) {
 }
 
 int32_t main(int32_t argc, char *argv[]) {
-    // we need 2 or 4 arguments!
+    // we need 2 arguments!
     if(argc != 2) {
         std::cout << "Usage: ./eval_scene_flow result_sha" << std::endl;
         return 1;
@@ -770,7 +797,7 @@ int32_t main(int32_t argc, char *argv[]) {
     std::string result_sha = argv[1];
 
     // run evaluation
-    bool success = eval(result_sha/*, mail*/);
+    bool success = eval(result_sha);
     std::cout << std::endl;
     std::cout << "Evaluation: " << (success ? "Complete.":"Incomplete.") << std::endl;
 

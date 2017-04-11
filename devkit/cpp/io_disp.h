@@ -47,8 +47,9 @@ public:
     // construct empty (= all pixels invalid) disparity map of given width / height
     DisparityImage(const int32_t width, const int32_t height) : width_(width), height_(height) {
         data_ = (float*)malloc(width*height * sizeof(float));
-        for (int32_t i = 0; i < width*height; i++)
+        for (int32_t i = 0; i < width*height; i++) {
             data_[i] = -1;
+        }
     }
 
     // deconstructor
@@ -164,8 +165,9 @@ public:
                         // set pixel to min disparity
                         if (u1 > 0 && u2 < width_ - 1) {
                             float d_ipol = std::min(getDisp(u1 - 1, v), getDisp(u2 + 1, v));
-                            for (int32_t u_curr = u1; u_curr <= u2; u_curr++)
+                            for (int32_t u_curr = u1; u_curr <= u2; u_curr++) {
                                 setDisp(u_curr, v, d_ipol);
+                            }
                         }
                     }
 
