@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 project(evaluate_scene_flow)
 add_executable(evaluate_scene_flow evaluate_scene_flow.cpp)
 
